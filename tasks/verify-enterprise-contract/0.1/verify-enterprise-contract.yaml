@@ -34,6 +34,8 @@ spec:
       description: |
         Spec section of an ApplicationSnapshot resource. Not all fields of the
         resource are required. A minimal example:
+
+        ```json
           {
             "components": [
               {
@@ -41,7 +43,9 @@ spec:
               }
             ]
           }
-        Each "containerImage" in the "components" array is validated.
+        ```
+
+        Each `containerImage` in the `components` array is validated.
     - name: POLICY_CONFIGURATION
       type: string
       description: |
@@ -83,18 +87,18 @@ spec:
         with external services. This is useful when using the integrated registry
         and a local instance of Rekor on a development cluster which may use
         certificates issued by a not-commonly trusted root CA. In such cases,
-        "/var/run/secrets/kubernetes.io/serviceaccount" is a good value. Multiple
-        paths can be provided by using the ":" separator.
+        `/var/run/secrets/kubernetes.io/serviceaccount` is a good value. Multiple
+        paths can be provided by using the `:` separator.
       default: ""
 
     - name: INFO
       type: string
-      description: Include rule titles and descriptions in the output. Set to "false" to disable it.
+      description: Include rule titles and descriptions in the output. Set to `"false"` to disable it.
       default: "true"
 
     - name: STRICT
       type: string
-      description: Fail the task if policy fails. Set to "false" to disable it.
+      description: Fail the task if policy fails. Set to `"false"` to disable it.
       default: "true"
 
     - name: HOMEDIR
@@ -123,12 +127,12 @@ spec:
 
   steps:
     - name: version
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:7d06efc6917aa7451385e5038259a244a95aded54229b0bd96055ab6a9c56cc0
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
       command: [ec]
       args:
         - version
     - name: initialize-tuf
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:7d06efc6917aa7451385e5038259a244a95aded54229b0bd96055ab6a9c56cc0
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
       script: |-
         set -euo pipefail
 
@@ -144,7 +148,7 @@ spec:
         - name: TUF_MIRROR
           value: "$(params.TUF_MIRROR)"
     - name: validate
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:7d06efc6917aa7451385e5038259a244a95aded54229b0bd96055ab6a9c56cc0
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
       command: [ec]
       args:
         - validate
@@ -192,23 +196,23 @@ spec:
         limits:
           memory: 2Gi
     - name: report
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:7d06efc6917aa7451385e5038259a244a95aded54229b0bd96055ab6a9c56cc0
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report.yaml"
     - name: report-json
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:7d06efc6917aa7451385e5038259a244a95aded54229b0bd96055ab6a9c56cc0
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report-json.json"
     - name: summary
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:7d06efc6917aa7451385e5038259a244a95aded54229b0bd96055ab6a9c56cc0
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
       command: [jq]
       args:
         - "."
         - "$(results.TEST_OUTPUT.path)"
     - name: assert
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:7d06efc6917aa7451385e5038259a244a95aded54229b0bd96055ab6a9c56cc0
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
       command: [jq]
       args:
         - "--argjson"
