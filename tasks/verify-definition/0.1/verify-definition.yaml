@@ -60,13 +60,13 @@ spec:
         value: "$(params.HOMEDIR)"
   steps:
     - name: version
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:141a7cd25ce0d098b1e40fd75d6f75873f8709c5f96f6340993b269c56e3f387
       command: [ec]
       args:
         - version
     - name: validate
       workingDir: "$(workspaces.output.path)"
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:141a7cd25ce0d098b1e40fd75d6f75873f8709c5f96f6340993b269c56e3f387
       command: [ec]
       args:
         - validate
