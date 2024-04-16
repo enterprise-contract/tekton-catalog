@@ -127,12 +127,13 @@ spec:
 
   steps:
     - name: version
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:141a7cd25ce0d098b1e40fd75d6f75873f8709c5f96f6340993b269c56e3f387
       command: [ec]
       args:
         - version
+
     - name: initialize-tuf
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:141a7cd25ce0d098b1e40fd75d6f75873f8709c5f96f6340993b269c56e3f387
       script: |-
         set -euo pipefail
 
@@ -147,8 +148,9 @@ spec:
       env:
         - name: TUF_MIRROR
           value: "$(params.TUF_MIRROR)"
+
     - name: validate
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:141a7cd25ce0d098b1e40fd75d6f75873f8709c5f96f6340993b269c56e3f387
       command: [ec]
       args:
         - validate
@@ -195,24 +197,28 @@ spec:
           memory: 2Gi
         limits:
           memory: 2Gi
+
     - name: report
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:141a7cd25ce0d098b1e40fd75d6f75873f8709c5f96f6340993b269c56e3f387
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report.yaml"
+
     - name: report-json
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:141a7cd25ce0d098b1e40fd75d6f75873f8709c5f96f6340993b269c56e3f387
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report-json.json"
+
     - name: summary
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:141a7cd25ce0d098b1e40fd75d6f75873f8709c5f96f6340993b269c56e3f387
       command: [jq]
       args:
         - "."
         - "$(results.TEST_OUTPUT.path)"
+
     - name: assert
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:c1f9d5c1ee0136f2c4b1848693f7436042d077ed51f19ec1c8f72e4506422bee
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:141a7cd25ce0d098b1e40fd75d6f75873f8709c5f96f6340993b269c56e3f387
       command: [jq]
       args:
         - "--argjson"
