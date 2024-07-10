@@ -115,6 +115,11 @@ spec:
       description: Merge additional Rego variables into the policy data. Use syntax "key=value,key2=value2..."
       default: ""
 
+    - name: TIMEOUT
+      type: string
+      description: Timeout setting for `ec validate`.
+      default: "5m0s"
+
   workspaces:
     - name: data
       description: The workspace where the snapshot spec json file resides
@@ -131,13 +136,13 @@ spec:
 
   steps:
     - name: version
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6b347029299ed4de4c766c987d01506cd88ff674cf334ae2c4363792c8a117f1
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6845f91bb0eeb045769f0e25b1beb85594cea1dd6a4f506f90acb5a0ee2bd5aa
       command: [ec]
       args:
         - version
 
     - name: initialize-tuf
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6b347029299ed4de4c766c987d01506cd88ff674cf334ae2c4363792c8a117f1
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6845f91bb0eeb045769f0e25b1beb85594cea1dd6a4f506f90acb5a0ee2bd5aa
       script: |-
         set -euo pipefail
 
@@ -154,7 +159,7 @@ spec:
           value: "$(params.TUF_MIRROR)"
 
     - name: validate
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6b347029299ed4de4c766c987d01506cd88ff674cf334ae2c4363792c8a117f1
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6845f91bb0eeb045769f0e25b1beb85594cea1dd6a4f506f90acb5a0ee2bd5aa
       command: [ec]
       args:
         - validate
@@ -171,6 +176,7 @@ spec:
         - "--ignore-rekor=$(params.IGNORE_REKOR)"
         # NOTE: The syntax below is required to negate boolean parameters
         - "--info=$(params.INFO)"
+        - "--timeout=$(params.TIMEOUT)"
         - "--strict=false"
         - "--show-successes"
         - "--effective-time=$(params.EFFECTIVE_TIME)"
@@ -204,26 +210,26 @@ spec:
           memory: 2Gi
 
     - name: report
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6b347029299ed4de4c766c987d01506cd88ff674cf334ae2c4363792c8a117f1
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6845f91bb0eeb045769f0e25b1beb85594cea1dd6a4f506f90acb5a0ee2bd5aa
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report.yaml"
 
     - name: report-json
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6b347029299ed4de4c766c987d01506cd88ff674cf334ae2c4363792c8a117f1
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6845f91bb0eeb045769f0e25b1beb85594cea1dd6a4f506f90acb5a0ee2bd5aa
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report-json.json"
 
     - name: summary
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6b347029299ed4de4c766c987d01506cd88ff674cf334ae2c4363792c8a117f1
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6845f91bb0eeb045769f0e25b1beb85594cea1dd6a4f506f90acb5a0ee2bd5aa
       command: [jq]
       args:
         - "."
         - "$(results.TEST_OUTPUT.path)"
 
     - name: assert
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6b347029299ed4de4c766c987d01506cd88ff674cf334ae2c4363792c8a117f1
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:6845f91bb0eeb045769f0e25b1beb85594cea1dd6a4f506f90acb5a0ee2bd5aa
       command: [jq]
       args:
         - "--argjson"
