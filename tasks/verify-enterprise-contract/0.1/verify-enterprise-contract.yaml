@@ -130,6 +130,11 @@ spec:
       description: Timeout setting for `ec validate`.
       default: "5m0s"
 
+    - name: WORKERS
+      type: string
+      description: Number of parallel workers to use for policy evaluation.
+      default: "1"
+
   workspaces:
     - name: data
       description: The workspace where the snapshot spec json file resides
@@ -147,7 +152,7 @@ spec:
   steps:
 
     - name: initialize-tuf
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:b6c7dc1a4b66ddd7593e073138212e0fa8587f0c4281cda40b5a5682a727bec7
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:662648a893b2403fe6604655a7c98dd561705865e29239198e18f689ee7ae242
       script: |-
         set -euo pipefail
 
@@ -164,7 +169,7 @@ spec:
           value: "$(params.TUF_MIRROR)"
 
     - name: validate
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:b6c7dc1a4b66ddd7593e073138212e0fa8587f0c4281cda40b5a5682a727bec7
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:662648a893b2403fe6604655a7c98dd561705865e29239198e18f689ee7ae242
       onError: continue # progress even if the step fails so we can see the debug logs
       command: [ec]
       args:
@@ -180,6 +185,8 @@ spec:
         - "--rekor-url"
         - "$(params.REKOR_HOST)"
         - "--ignore-rekor=$(params.IGNORE_REKOR)"
+        - "--workers"
+        - "$(params.WORKERS)"
         # NOTE: The syntax below is required to negate boolean parameters
         - "--info=$(params.INFO)"
         - "--timeout=$(params.TIMEOUT)"
@@ -224,21 +231,21 @@ spec:
           readOnly: true
 
     - name: report
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:b6c7dc1a4b66ddd7593e073138212e0fa8587f0c4281cda40b5a5682a727bec7
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:662648a893b2403fe6604655a7c98dd561705865e29239198e18f689ee7ae242
       onError: continue  # progress even if the step fails so we can see the debug logs
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report.yaml"
 
     - name: report-json
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:b6c7dc1a4b66ddd7593e073138212e0fa8587f0c4281cda40b5a5682a727bec7
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:662648a893b2403fe6604655a7c98dd561705865e29239198e18f689ee7ae242
       onError: continue  # progress even if the step fails so we can see the debug logs
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report-json.json"
 
     - name: summary
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:b6c7dc1a4b66ddd7593e073138212e0fa8587f0c4281cda40b5a5682a727bec7
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:662648a893b2403fe6604655a7c98dd561705865e29239198e18f689ee7ae242
       onError: continue  # progress even if the step fails so we can see the debug logs
       command: [jq]
       args:
@@ -246,25 +253,25 @@ spec:
         - "$(results.TEST_OUTPUT.path)"
 
     - name: info
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:b6c7dc1a4b66ddd7593e073138212e0fa8587f0c4281cda40b5a5682a727bec7
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:662648a893b2403fe6604655a7c98dd561705865e29239198e18f689ee7ae242
       command: [printf]
       args:
         - "----- DEBUG OUTPUT -----\n"
 
     - name: version
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:b6c7dc1a4b66ddd7593e073138212e0fa8587f0c4281cda40b5a5682a727bec7
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:662648a893b2403fe6604655a7c98dd561705865e29239198e18f689ee7ae242
       command: [ec]
       args:
         - version
 
     - name: debug-log
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:b6c7dc1a4b66ddd7593e073138212e0fa8587f0c4281cda40b5a5682a727bec7
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:662648a893b2403fe6604655a7c98dd561705865e29239198e18f689ee7ae242
       command: [cat]
       args:
         - "$(params.HOMEDIR)/debug.log"
 
     - name: assert
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:b6c7dc1a4b66ddd7593e073138212e0fa8587f0c4281cda40b5a5682a727bec7
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:662648a893b2403fe6604655a7c98dd561705865e29239198e18f689ee7ae242
       command: [jq]
       args:
         - "--argjson"
