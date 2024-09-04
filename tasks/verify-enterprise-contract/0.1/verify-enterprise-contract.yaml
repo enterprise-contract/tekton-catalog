@@ -152,7 +152,7 @@ spec:
   steps:
 
     - name: initialize-tuf
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:86c06ef742257cbbcbcc879b1ed27b2679a75e64995c77b2287137556d041d6b
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:35695875ea3a696701eadee709d2aab44e6db34c45cfa858a02a23fb29e3dd86
       script: |-
         set -euo pipefail
 
@@ -169,7 +169,7 @@ spec:
           value: "$(params.TUF_MIRROR)"
 
     - name: validate
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:86c06ef742257cbbcbcc879b1ed27b2679a75e64995c77b2287137556d041d6b
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:35695875ea3a696701eadee709d2aab44e6db34c45cfa858a02a23fb29e3dd86
       onError: continue # progress even if the step fails so we can see the debug logs
       command: [ec]
       args:
@@ -231,21 +231,21 @@ spec:
           readOnly: true
 
     - name: report
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:86c06ef742257cbbcbcc879b1ed27b2679a75e64995c77b2287137556d041d6b
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:35695875ea3a696701eadee709d2aab44e6db34c45cfa858a02a23fb29e3dd86
       onError: continue  # progress even if the step fails so we can see the debug logs
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report.yaml"
 
     - name: report-json
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:86c06ef742257cbbcbcc879b1ed27b2679a75e64995c77b2287137556d041d6b
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:35695875ea3a696701eadee709d2aab44e6db34c45cfa858a02a23fb29e3dd86
       onError: continue  # progress even if the step fails so we can see the debug logs
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report-json.json"
 
     - name: summary
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:86c06ef742257cbbcbcc879b1ed27b2679a75e64995c77b2287137556d041d6b
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:35695875ea3a696701eadee709d2aab44e6db34c45cfa858a02a23fb29e3dd86
       onError: continue  # progress even if the step fails so we can see the debug logs
       command: [jq]
       args:
@@ -253,25 +253,25 @@ spec:
         - "$(results.TEST_OUTPUT.path)"
 
     - name: info
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:86c06ef742257cbbcbcc879b1ed27b2679a75e64995c77b2287137556d041d6b
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:35695875ea3a696701eadee709d2aab44e6db34c45cfa858a02a23fb29e3dd86
       command: [printf]
       args:
         - "----- DEBUG OUTPUT -----\n"
 
     - name: version
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:86c06ef742257cbbcbcc879b1ed27b2679a75e64995c77b2287137556d041d6b
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:35695875ea3a696701eadee709d2aab44e6db34c45cfa858a02a23fb29e3dd86
       command: [ec]
       args:
         - version
 
     - name: debug-log
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:86c06ef742257cbbcbcc879b1ed27b2679a75e64995c77b2287137556d041d6b
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:35695875ea3a696701eadee709d2aab44e6db34c45cfa858a02a23fb29e3dd86
       command: [cat]
       args:
         - "$(params.HOMEDIR)/debug.log"
 
     - name: assert
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:86c06ef742257cbbcbcc879b1ed27b2679a75e64995c77b2287137556d041d6b
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:35695875ea3a696701eadee709d2aab44e6db34c45cfa858a02a23fb29e3dd86
       command: [jq]
       args:
         - "--argjson"
