@@ -171,7 +171,7 @@ spec:
   steps:
 
     - name: initialize-tuf
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       script: |-
         set -euo pipefail
 
@@ -199,11 +199,11 @@ spec:
           value: $(params.SINGLE_COMPONENT_CUSTOM_RESOURCE_NS)
         - name: SNAPSHOT_PATH
           value: $(params.HOMEDIR)/snapshot.json
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       onError: continue # progress even if the step fails so we can see the debug logs
       command: [reduce-snapshot.sh]
     - name: validate
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       onError: continue # progress even if the step fails so we can see the debug logs
       command: [ec]
       args:
@@ -265,21 +265,21 @@ spec:
           readOnly: true
 
     - name: report
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       onError: continue  # progress even if the step fails so we can see the debug logs
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report.yaml"
 
     - name: report-json
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       onError: continue  # progress even if the step fails so we can see the debug logs
       command: [cat]
       args:
         - "$(params.HOMEDIR)/report-json.json"
 
     - name: summary
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       onError: continue  # progress even if the step fails so we can see the debug logs
       command: [jq]
       args:
@@ -287,25 +287,25 @@ spec:
         - "$(results.TEST_OUTPUT.path)"
 
     - name: info
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       command: [printf]
       args:
         - "----- DEBUG OUTPUT -----\n"
 
     - name: version
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       command: [ec]
       args:
         - version
 
     - name: debug-log
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       command: [cat]
       args:
         - "$(params.HOMEDIR)/debug.log"
 
     - name: assert
-      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:913c7dac3d41877b01835d2e55bcd970c6cdbf4944f8176e9e3de9548642a2b4
+      image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2784e6899ce02e8a5a46a8a74846f8ab33a4a816a1c6c712c6c18f05998ccabc
       command: [jq]
       args:
         - "--argjson"
