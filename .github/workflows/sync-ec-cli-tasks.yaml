@@ -25,14 +25,14 @@ jobs:
         disable-telemetry: true
 
     - name: Checkout tekton-catalog
-      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       with:
         repository: enterprise-contract/tekton-catalog
         ref: main
         path: tekton-catalog
 
     - name: Checkout ec-cli
-      uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       with:
         repository: enterprise-contract/ec-cli
         ref: main
