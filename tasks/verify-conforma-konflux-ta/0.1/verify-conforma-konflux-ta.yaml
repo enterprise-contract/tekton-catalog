@@ -18,9 +18,9 @@
 apiVersion: tekton.dev/v1
 kind: Task
 metadata:
-  name: verify-enterprise-contract
+  name: verify-conforma-konflux-ta
   annotations:
-    tekton.dev/displayName: Verify Enterprise Contract
+    tekton.dev/displayName: Verify Conforma in Konflux
     tekton.dev/pipelines.minVersion: "0.19"
     tekton.dev/tags: ec, chains, signature, conftest
   labels:
@@ -29,23 +29,16 @@ metadata:
 spec:
   description: Verify the enterprise contract is met
   params:
-    - name: IMAGES
+    - name: SNAPSHOT_FILENAME
       type: string
       description: |
-        Spec section of an ApplicationSnapshot resource. Not all fields of the
-        resource are required. A minimal example:
+        The filename of the `Snapshot` that is located within the trusted artifact
 
-        ```json
-          {
-            "components": [
-              {
-                "containerImage": "quay.io/example/repo:latest"
-              }
-            ]
-          }
-        ```
+    - name: SOURCE_DATA_ARTIFACT
+      type: string
+      description: >
+        Trusted Artifact to use to obtain the Snapshot to validate.
 
-        Each `containerImage` in the `components` array is validated.
     - name: POLICY_CONFIGURATION
       type: string
       description: |
@@ -156,21 +149,41 @@ spec:
       type: string
       default: ""
 
-  workspaces:
-    - name: data
-      description: The workspace where the snapshot spec json file resides
-      optional: true
+    - name: ORAS_OPTIONS
+      description: oras options to pass to Trusted Artifacts calls
+      type: string
+      default: ""
+
+    - name: TRUSTED_ARTIFACTS_DEBUG
+      description: Flag to enable debug logging in trusted artifacts. Set to a non-empty string to enable.
+      type: string
+      default: ""
 
   results:
     - name: TEST_OUTPUT
       description: Short summary of the policy evaluation for each image
 
   stepTemplate:
+    volumeMounts:
+      - mountPath: /var/workdir
+        name: workdir
     env:
+      - name: "ORAS_OPTIONS"
+        value: "$(params.ORAS_OPTIONS)"
+      - name: "DEBUG"
+        value: "$(params.TRUSTED_ARTIFACTS_DEBUG)"
       - name: HOME
         value: "$(params.HOMEDIR)"
 
   steps:
+    - name: use-trusted-artifact
+      args:
+        - use
+        # need to specify a subfolder during the extract to avoid the error:
+        # tar: .: Cannot change mode to rwxr-sr-x: Operation not permitted
+        - $(params.SOURCE_DATA_ARTIFACT)=/var/workdir/$(context.taskRun.uid)
+      computeResources: {}
+      image: quay.io/redhat-appstudio/build-trusted-artifacts:e02102ede09aa07187cba066ad547a54724e5cf4
 
     - name: initialize-tuf
       image: quay.io/enterprise-contract/ec-cli:snapshot@sha256:2ff0036248004e9e51d2854358a32e6ff8b8d6e08368f6db8e8a5379286b2494
@@ -192,7 +205,7 @@ spec:
     - name: reduce
       env:
         - name: SNAPSHOT
-          value: $(params.IMAGES)
+          value: /var/workdir/$(context.taskRun.uid)/$(params.SNAPSHOT_FILENAME)
         - name: SINGLE_COMPONENT
           value: $(params.SINGLE_COMPONENT)
         - name: CUSTOM_RESOURCE
@@ -322,3 +335,5 @@ spec:
           - key: $(params.CA_TRUST_CONFIG_MAP_KEY)
             path: ca-bundle.crt
         optional: true
+    - name: workdir
+      emptyDir: {}
